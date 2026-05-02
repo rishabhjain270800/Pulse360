@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse360 | The Marketing Intelligence Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+    <div class="loader">
+        <div class="loader-text">Loading the future of marketing...</div>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">PULSE<span>360</span></div>
+        <div class="nav-links">
+            <a href="#platform">Platform</a>
+            <a href="#modules">Modules</a>
+            <a href="#waitlist" class="btn-primary">Get Early Access</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="badge">Coming Soon</div>
+                <h1 class="hero-title">
+                    <span class="text-reveal">The Marketing Intelligence Suite</span><br>
+                    <span class="text-reveal gradient-text">Pulse360.</span>
+                </h1>
+                <p class="hero-subtitle text-reveal">
+                    The future of enterprise marketing operations is here. Experience a truly connected system.
+                </p>
+                <div class="hero-cta text-reveal">
+                    <a href="#waitlist" class="btn-primary btn-large">Join the Waitlist</a>
+                </div>
+            </div>
+            <div class="hero-background">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+            </div>
+        </section>
+
+        <!-- Fragmentation vs Unified Section -->
+        <section class="problem-solution" id="platform">
+            <div class="section-header">
+                <h2>Eliminate the Fragmentation</h2>
+                <p>Stop using five disconnected tools. Experience a continuous marketing loop.</p>
+            </div>
+            
+            <div class="visual-container ecosystem-visual">
+                <canvas id="ecosystem-canvas"></canvas>
+                <div class="unified-title" style="opacity: 0;">
+                    <h3>The Pulse360 Ecosystem</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Suite Showcase -->
+        <section class="modules-showcase" id="modules">
+            <div class="section-header align-left">
+                <h2>The Product Suite</h2>
+                <p>Five powerful modules. One shared intelligence layer.</p>
+            </div>
+            
+            <div class="modules-grid">
+                <!-- Module 1 -->
+                <div class="module-card">
+                    <div class="module-dynamic">
+                        <div class="dyn-bars">
+                            <div class="bar bar-1"></div>
+                            <div class="bar bar-2"></div>
+                            <div class="bar bar-3"></div>
+                        </div>
+                    </div>
+                    <h3>Module 01</h3>
+                    <h4>Planning & Allocation</h4>
+                    <p>Create, manage, and approve multi-channel plans with integrated budget allocation.</p>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="module-card">
+                    <div class="module-dynamic">
+                        <div class="dyn-radar">
+                            <div class="radar-sweep"></div>
+                        </div>
+                    </div>
+                    <h3>Module 02</h3>
+                    <h4>Market Intelligence</h4>
+                    <p>Monitor competitor activity, keyword trends, and market signals in real time.</p>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="module-card">
+                    <div class="module-dynamic">
+                        <div class="dyn-flow">
+                            <div class="flow-particle p-1"></div>
+                            <div class="flow-particle p-2"></div>
+                            <div class="flow-particle p-3"></div>
+                        </div>
+                    </div>
+                    <h3>Module 03</h3>
+                    <h4>Campaign Execution</h4>
+                    <p>Build and launch campaigns, track performance, and optimize across digital channels.</p>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="module-card">
+                    <div class="module-dynamic">
+                        <div class="dyn-pulse">
+                            <div class="pulse-ring pr-1"></div>
+                            <div class="pulse-ring pr-2"></div>
+                        </div>
+                    </div>
+                    <h3>Module 04</h3>
+                    <h4>Surveys & Research</h4>
+                    <p>Design surveys, collect audience responses, and measure campaign impact.</p>
+                </div>
+
+                <!-- Module 5 -->
+                <div class="module-card featured-module">
+                    <div class="module-dynamic">
+                        <div class="dyn-prism">
+                            <div class="prism-face pf-1"></div>
+                            <div class="prism-face pf-2"></div>
+                            <div class="prism-face pf-3"></div>
+                        </div>
+                    </div>
+                    <h3>Module 05</h3>
+                    <h4>The Knowledge Layer</h4>
+                    <p>The single source of truth for intelligence, feeding insights to every other component.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section" id="waitlist">
+            <div class="cta-container">
+                <h2>Ready to transform your operations?</h2>
+                <p>We are launching soon. Secure your spot to be among the first to experience the unified suite.</p>
+                <form class="waitlist-form">
+                    <input type="email" placeholder="Enter your work email" required>
+                    <button type="submit" class="btn-primary">Request Access</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">PULSE<span>360</span></div>
+            <div class="footer-copy">&copy; 2026. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Three.js and GSAP Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="js/ecosystem.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
