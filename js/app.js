@@ -74,6 +74,48 @@ document.addEventListener("DOMContentLoaded", (event) => {
         ease: "power3.out"
     });
 
+    // Premium Module Card Interactions (Spotlight + 3D Tilt)
+    const cards = document.querySelectorAll('.module-card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Update CSS variables for spotlight gradient
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+
+            // 3D Tilt calculation
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg tilt
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Reset to flat
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+    });
+
+    // Horizontal Scroll for Global Impact Section
+    const horizontalContainer = document.querySelector('.horizontal-container');
+    if (horizontalContainer) {
+        gsap.to(horizontalContainer, {
+            x: () => -(horizontalContainer.scrollWidth - document.documentElement.clientWidth) + "px",
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".global-impact",
+                pin: true,
+                scrub: 1,
+                end: () => "+=" + horizontalContainer.offsetWidth
+            }
+        });
+    }
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

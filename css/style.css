@@ -317,34 +317,133 @@ section {
 }
 
 /* Modules Showcase */
+.modules-showcase {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.ambient-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.ambient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: float 20s infinite alternate ease-in-out;
+}
+
+.orb-purple {
+    background: var(--primary-color);
+    width: 600px;
+    height: 600px;
+    top: -10%;
+    left: -10%;
+}
+
+.orb-orange {
+    background: var(--secondary-color);
+    width: 500px;
+    height: 500px;
+    bottom: -10%;
+    right: -10%;
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(10%, 10%) scale(1.1); }
+}
+
 .modules-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
+    position: relative;
+    z-index: 10;
+    perspective: 1000px; /* For 3D tilt */
 }
 
 .module-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 2.5rem;
     border-radius: 20px;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: transform 0.1s ease, box-shadow 0.3s ease;
     backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+/* Spotlight Effect */
+.module-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+        rgba(255, 107, 0, 0.1),
+        transparent 40%
+    );
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.module-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+        400px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+        rgba(255, 107, 0, 0.5),
+        transparent 40%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .module-card:hover {
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.module-card:hover::before,
+.module-card:hover::after {
+    opacity: 1;
 }
 
 .module-dynamic {
-    margin-bottom: 1.5rem;
-    width: 60px;
     height: 60px;
-    position: relative;
+    margin-bottom: 2rem;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    filter: drop-shadow(0 0 8px rgba(255, 107, 0, 0.4));
+    transform: scale(1.2);
+    transform-origin: bottom left;
     justify-content: center;
 }
 
@@ -492,6 +591,90 @@ section {
 
 .featured-module p {
     max-width: 600px;
+}
+
+/* Global Impact Section (Horizontal Scroll) */
+.global-impact {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg-color);
+}
+
+.horizontal-scroll-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.horizontal-container {
+    display: flex;
+    flex-wrap: nowrap;
+    padding: 0 10vw;
+    gap: 10vw;
+    /* Will be translated via GSAP */
+}
+
+.impact-card {
+    flex: 0 0 80vw;
+    height: 60vh;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+.impact-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 107, 0, 0.1), transparent 60%);
+    pointer-events: none;
+}
+
+.impact-content {
+    max-width: 800px;
+    padding: 4rem;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.impact-number {
+    font-family: var(--font-heading);
+    font-size: 8rem;
+    font-weight: 800;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.05);
+    position: absolute;
+    top: -4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.impact-content h3 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #ffffff, var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.impact-content p {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--text-muted);
+    line-height: 1.6;
 }
 
 /* CTA Section */
