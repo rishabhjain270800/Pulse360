@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Scene Setup
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.z = 300;
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+    camera.position.z = 600;
 
     const renderer = new THREE.WebGLRenderer({
         canvas: canvas,
@@ -15,222 +15,163 @@ document.addEventListener("DOMContentLoaded", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Handle Resize
+    // Resize Handling
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // 2. Universe Elements
-    
-    // Star Field Background
-    const starCount = 2000;
-    const starGeometry = new THREE.BufferGeometry();
-    const starPositions = new Float32Array(starCount * 3);
-    for (let i = 0; i < starCount; i++) {
-        starPositions[i * 3] = (Math.random() - 0.5) * 2000;
-        starPositions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
-        starPositions[i * 3 + 2] = (Math.random() - 0.5) * 2000;
+    // 2. Custom Cursor Logic
+    const cursor = document.querySelector('.custom-cursor');
+    let mouseX = 0;
+    let mouseY = 0;
+    let ballX = 0;
+    let ballY = 0;
+    const speed = 0.2;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (cursor.style.opacity === "0") cursor.style.opacity = "1";
+    });
+
+    function animateCursor() {
+        const distX = mouseX - ballX;
+        const distY = mouseY - ballY;
+        ballX = ballX + (distX * speed);
+        ballY = ballY + (distY * speed);
+        cursor.style.left = ballX + 'px';
+        cursor.style.top = ballY + 'px';
+        requestAnimationFrame(animateCursor);
     }
-    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-    const starMaterial = new THREE.PointsMaterial({
+    animateCursor();
+
+    // 3. Carousel Logic
+    const itemsData = [
+        { id: 0, name: "BRAND BOOK", img: "assets/brand_book_ui_viz_1777910167374.png" },
+        { id: 1, name: "PULSE PLAN", img: "assets/pulse_plan_ui_viz_1777910183116.png" },
+        { id: 2, name: "PULSE SCOUT", img: "assets/pulse_scout_ui_viz_1777910198957.png" },
+        { id: 3, name: "PULSE ENGAGE", img: "assets/pulse_engage_ui_viz_1777910213438.png" },
+        { id: 4, name: "PULSE SHIFT", img: "assets/pulse_shift_ui_viz_1777910228049.png" }
+    ];
+
+    const cardGroup = new THREE.Group();
+    scene.add(cardGroup);
+
+    const textureLoader = new THREE.TextureLoader();
+    const radius = 500;
+    const cards = [];
+
+    itemsData.forEach((data, i) => {
+        const geometry = new THREE.PlaneGeometry(400, 250);
+        const texture = textureLoader.load(data.img);
+        const material = new THREE.MeshBasicMaterial({
+            map: texture,
+            transparent: true,
+            opacity: 0.8,
+            side: THREE.DoubleSide
+        });
+        const card = new THREE.Mesh(geometry, material);
+
+        // Position on a cylinder
+        const angle = (i / itemsData.length) * Math.PI * 2;
+        card.position.x = Math.sin(angle) * radius;
+        card.position.z = Math.cos(angle) * radius;
+        card.rotation.y = angle;
+
+        card.userData = { id: data.id, name: data.name, angle: angle };
+        cardGroup.add(card);
+        cards.push(card);
+    });
+
+    // 4. Particle Core (Cinematic Background)
+    const particleCount = 1000;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePos = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i++) {
+        particlePos[i * 3] = (Math.random() - 0.5) * 1000;
+        particlePos[i * 3 + 1] = (Math.random() - 0.5) * 1000;
+        particlePos[i * 3 + 2] = (Math.random() - 0.5) * 1000;
+    }
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+    const particleMat = new THREE.PointsMaterial({
         color: 0x5d3fd3,
         size: 2,
         transparent: true,
-        opacity: 0.5,
-        sizeAttenuation: true
+        opacity: 0.3
     });
-    const starField = new THREE.Points(starGeometry, starMaterial);
-    scene.add(starField);
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
 
-    // Pulse 360 Knowledge Layer (Central Hub)
-    const knowledgeGroup = new THREE.Group();
-    scene.add(knowledgeGroup);
-
-    // Large outer translucent sphere
-    const outerLayerGeo = new THREE.SphereGeometry(60, 32, 32);
-    const outerLayerMat = new THREE.MeshBasicMaterial({
-        color: 0x5d3fd3,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.1
-    });
-    const outerLayer = new THREE.Mesh(outerLayerGeo, outerLayerMat);
-    knowledgeGroup.add(outerLayer);
-
-    // Inner pulsing wireframe
-    const innerCoreGeo = new THREE.IcosahedronGeometry(40, 1);
-    const innerCoreMat = new THREE.MeshBasicMaterial({
-        color: 0xff6b00,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.2
-    });
-    const innerCore = new THREE.Mesh(innerCoreGeo, innerCoreMat);
-    knowledgeGroup.add(innerCore);
-
-    // 3. Product Nodes (The Satellites)
-    const nodes = [];
-    const nodeGroup = new THREE.Group();
-    scene.add(nodeGroup);
-
-    const moduleData = [
-        { name: "Brand Book", pos: { x: -120, y: 80, z: 50 }, color: 0x5d3fd3, id: 0 },
-        { name: "Pulse Plan", pos: { x: -140, y: -60, z: -20 }, color: 0xff6b00, id: 1 },
-        { name: "Pulse Scout", pos: { x: 120, y: 100, z: -50 }, color: 0x5d3fd3, id: 2 },
-        { name: "Pulse Engage", pos: { x: 150, y: 0, z: 30 }, color: 0xff6b00, id: 3 },
-        { name: "Pulse Shift", pos: { x: 100, y: -120, z: 80 }, color: 0x5d3fd3, id: 4 }
-    ];
-
-    const nodeGeo = new THREE.SphereGeometry(10, 32, 32);
-    
-    moduleData.forEach((data, index) => {
-        const nodeMat = new THREE.MeshBasicMaterial({
-            color: data.color,
-            transparent: true,
-            opacity: 0.8
-        });
-        const node = new THREE.Mesh(nodeGeo, nodeMat);
-        node.position.set(data.pos.x, data.pos.y, data.pos.z);
-        node.userData = { id: data.id, name: data.name };
-        nodeGroup.add(node);
-        nodes.push(node);
-
-        // Visual ring
-        const ringGeo = new THREE.RingGeometry(12, 14, 32);
-        const ringMat = new THREE.MeshBasicMaterial({
-            color: data.color,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.4
-        });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
-        node.add(ring);
-    });
-
-    // 4. Data Flow Lines
-    const connectionLines = [];
-    nodes.forEach(node => {
-        const points = [];
-        points.push(new THREE.Vector3(0, 0, 0));
-        points.push(node.position);
-        const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
-        const lineMat = new THREE.LineBasicMaterial({
-            color: 0x000000,
-            transparent: true,
-            opacity: 0.05
-        });
-        const line = new THREE.Line(lineGeo, lineMat);
-        scene.add(line);
-        connectionLines.push(line);
-    });
-
-    // 5. Interaction (Raycasting & GSAP)
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let isDetailOpen = false;
-
-    const detailPanels = document.querySelectorAll('.product-detail-panel');
-    const closeButtons = document.querySelectorAll('.close-panel');
-
-    function onMouseClick(event) {
-        if (isDetailOpen) return;
-
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(nodes);
-
-        if (intersects.length > 0) {
-            const clickedNode = intersects[0].object;
-            openNode(clickedNode);
-        }
-    }
-
-    function openNode(node) {
-        isDetailOpen = true;
-        const id = node.userData.id;
-        
-        // Camera Zoom Animation
-        const targetPos = new THREE.Vector3();
-        node.getWorldPosition(targetPos);
-        
-        gsap.to(camera.position, {
-            x: targetPos.x,
-            y: targetPos.y,
-            z: targetPos.z + 100,
-            duration: 1.5,
-            ease: "power3.inOut"
-        });
-
-        gsap.to(camera.lookAt, {
-            x: targetPos.x,
-            y: targetPos.y,
-            z: targetPos.z,
-            duration: 1.5
-        });
-
-        // Show Panel
-        detailPanels[id].classList.add('active');
-    }
-
-    function closeAllPanels() {
-        isDetailOpen = false;
-        detailPanels.forEach(p => p.classList.remove('active'));
-
-        // Reset Camera
-        gsap.to(camera.position, {
-            x: 0,
-            y: 0,
-            z: 300,
-            duration: 1.5,
-            ease: "power3.inOut"
-        });
-    }
-
-    canvas.addEventListener('click', onMouseClick);
-    closeButtons.forEach(btn => btn.addEventListener('click', closeAllPanels));
-
-    // 6. Scroll Synergy
+    // 5. Interaction & Scroll Sync
     gsap.registerPlugin(ScrollTrigger);
+
+    const scrollState = { progress: 0 };
+    const projectNameEl = document.querySelector('#current-project-name');
+    const projectNumEl = document.querySelector('.project-num');
+
     ScrollTrigger.create({
         trigger: ".modules-showcase",
-        start: "top center",
-        end: "bottom center",
+        start: "top top",
+        end: "+=300%",
+        pin: true,
+        scrub: 1,
         onUpdate: (self) => {
-            if (!isDetailOpen) {
-                nodeGroup.rotation.y = self.progress * Math.PI;
-                knowledgeGroup.rotation.y = -self.progress * Math.PI * 0.5;
-            }
+            scrollState.progress = self.progress;
+            
+            // Rotate the entire cylinder
+            cardGroup.rotation.y = -self.progress * Math.PI * 2;
+
+            // Lens Distortion & Scaling
+            cards.forEach((card, i) => {
+                // Calculate distance to center of view
+                const worldPos = new THREE.Vector3();
+                card.getWorldPosition(worldPos);
+                const distToCenter = Math.abs(worldPos.x);
+                
+                // Scale card based on how central it is
+                const scale = Math.max(0.5, 1.2 - (distToCenter / 800));
+                card.scale.set(scale, scale, scale);
+                
+                // Opacity fade
+                card.material.opacity = Math.max(0.1, 1 - (distToCenter / 600));
+
+                // Update UI text based on most central card
+                if (distToCenter < 100 && worldPos.z > 0) {
+                    projectNameEl.innerText = card.userData.name;
+                    projectNumEl.innerText = `0${card.userData.id + 1}`;
+                }
+            });
+
+            // Rotate particles for cinematic feel
+            particles.rotation.y = self.progress * Math.PI;
         }
+    });
+
+    // 6. Mouse Parallax (High Frequency)
+    const targetRotation = { x: 0, y: 0 };
+    document.addEventListener('mousemove', (e) => {
+        targetRotation.y = (e.clientX / window.innerWidth - 0.5) * 0.2;
+        targetRotation.x = (e.clientY / window.innerHeight - 0.5) * 0.2;
     });
 
     // 7. Render Loop
-    const clock = new THREE.Clock();
     function animate() {
         requestAnimationFrame(animate);
-        const elapsed = clock.getElapsedTime();
 
-        // Universe rotation
-        starField.rotation.y += 0.0005;
-        
-        // Knowledge Core pulse
-        const s = 1 + Math.sin(elapsed * 2) * 0.1;
-        innerCore.scale.set(s, s, s);
-        innerCore.rotation.x += 0.01;
-        innerCore.rotation.z += 0.01;
-        outerLayer.rotation.y -= 0.005;
+        // Subtle mouse parallax
+        scene.rotation.y += (targetRotation.y - scene.rotation.y) * 0.1;
+        scene.rotation.x += (targetRotation.x - scene.rotation.x) * 0.1;
 
-        // Node floating
-        nodes.forEach((node, i) => {
-            node.position.y += Math.sin(elapsed + i) * 0.1;
-            node.children[0].rotation.z += 0.01; // Rotate the ring
-        });
+        // Core animation
+        particles.rotation.z += 0.001;
 
         renderer.render(scene, camera);
     }
     animate();
+
+    // Cursor hover effects
+    canvas.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+    canvas.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
 });
