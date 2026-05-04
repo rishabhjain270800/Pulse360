@@ -1,11 +1,11 @@
 :root {
-    --bg-color: #030305;
-    --text-main: #ffffff;
-    --text-muted: #a0a0ab;
+    --bg-color: #fcfcfd;
+    --text-main: #1a1a1e;
+    --text-muted: #646470;
     --primary-color: #5d3fd3; /* Vibrant Purple */
     --secondary-color: #ff6b00; /* Vibrant Orange */
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --card-border: rgba(255, 255, 255, 0.08);
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-border: rgba(0, 0, 0, 0.08);
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
 }
@@ -77,7 +77,7 @@ a {
 }
 
 .navbar.scrolled {
-    background: rgba(3, 3, 5, 0.8);
+    background: rgba(252, 252, 253, 0.8);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--card-border);
 }
@@ -156,7 +156,7 @@ a {
 .badge {
     display: inline-block;
     padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.03);
     border: 1px solid var(--card-border);
     border-radius: 50px;
     font-size: 0.85rem;
@@ -173,7 +173,7 @@ a {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #ffffff, var(--secondary-color), var(--primary-color));
+    background: linear-gradient(135deg, var(--text-main), var(--secondary-color), var(--primary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-size: 200% auto;
@@ -207,7 +207,7 @@ a {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.4;
+    opacity: 0.2;
     animation: float 20s infinite ease-in-out;
 }
 
@@ -279,7 +279,6 @@ section {
     position: relative;
     z-index: 10;
     pointer-events: none;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
 }
 
 .ecosystem-visual {
@@ -309,10 +308,10 @@ section {
 
 .unified-title h3 {
     font-size: clamp(2rem, 4vw, 3rem);
-    background: linear-gradient(135deg, #ffffff, var(--secondary-color), var(--primary-color));
+    background: linear-gradient(135deg, var(--text-main), var(--secondary-color), var(--primary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+    text-shadow: 0 0 30px rgba(255, 107, 0, 0.2);
     letter-spacing: 2px;
 }
 
@@ -338,7 +337,7 @@ section {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.15;
+    opacity: 0.1;
     animation: float 20s infinite alternate ease-in-out;
 }
 
@@ -374,8 +373,8 @@ section {
 }
 
 .module-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     padding: 2.5rem;
     border-radius: 20px;
     transition: transform 0.1s ease, box-shadow 0.3s ease;
@@ -383,6 +382,7 @@ section {
     position: relative;
     overflow: hidden;
     transform-style: preserve-3d;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 /* Spotlight Effect */
@@ -428,7 +428,7 @@ section {
 }
 
 .module-card:hover {
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 .module-card:hover::before,
@@ -550,7 +550,7 @@ section {
     width: 20px;
     height: 20px;
     border: 2px solid var(--secondary-color);
-    background: rgba(93, 63, 211, 0.2);
+    background: rgba(93, 63, 211, 0.1);
     transform-origin: center;
     animation: spin 4s linear infinite;
 }
@@ -619,15 +619,15 @@ section {
 .impact-card {
     flex: 0 0 80vw;
     height: 60vh;
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #ffffff;
+    border: 1px solid var(--card-border);
     border-radius: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
 }
 
 .impact-card::before {
@@ -654,7 +654,7 @@ section {
     font-size: 8rem;
     font-weight: 800;
     color: transparent;
-    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.05);
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.03);
     position: absolute;
     top: -4rem;
     left: 50%;
@@ -666,7 +666,7 @@ section {
 .impact-content h3 {
     font-size: clamp(2rem, 4vw, 3rem);
     margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, #ffffff, var(--secondary-color));
+    background: linear-gradient(135deg, var(--text-main), var(--secondary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -679,7 +679,7 @@ section {
 
 /* CTA Section */
 .cta-section {
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1" width="100" height="100"/></svg>');
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="1" width="100" height="100"/></svg>');
     position: relative;
 }
 
@@ -718,8 +718,8 @@ section {
     padding: 1rem 1.5rem;
     border-radius: 50px;
     border: 1px solid var(--card-border);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: #ffffff;
+    color: var(--text-main);
     font-family: var(--font-body);
     font-size: 1rem;
     outline: none;

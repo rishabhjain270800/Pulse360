@@ -107,9 +107,9 @@ document.addEventListener("DOMContentLoaded", () => {
         size: 2.5,
         map: texture,
         transparent: true,
-        opacity: 0.8,
+        opacity: 0.9,
         depthWrite: false,
-        blending: THREE.AdditiveBlending, // Gives a nice glowing effect
+        blending: THREE.NormalBlending, // Better for light backgrounds
         color: 0xff6b00 // Vibrant Orange
     });
 
