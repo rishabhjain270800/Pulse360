@@ -44,31 +44,67 @@ document.addEventListener("DOMContentLoaded", () => {
     const starField = new THREE.Points(starGeometry, starMaterial);
     scene.add(starField);
 
-    // Pulse 360 Knowledge Layer (Central Hub)
-    const knowledgeGroup = new THREE.Group();
-    scene.add(knowledgeGroup);
+    // Pulse 360 Knowledge Layer (The Globe)
+    const globeGroup = new THREE.Group();
+    scene.add(globeGroup);
 
-    // Large outer translucent sphere
-    const outerLayerGeo = new THREE.SphereGeometry(60, 32, 32);
-    const outerLayerMat = new THREE.MeshBasicMaterial({
+    const globeRadius = 100;
+    const globePointsCount = 6000;
+    const globeGeometry = new THREE.BufferGeometry();
+    const globePositions = new Float32Array(globePointsCount * 3);
+    const globeColors = new Float32Array(globePointsCount * 3);
+    
+    const color1 = new THREE.Color(0xff6b00); // Orange
+    const color2 = new THREE.Color(0x5d3fd3); // Purple
+
+    for (let i = 0; i < globePointsCount; i++) {
+        const phi = Math.acos(-1 + (2 * i) / globePointsCount);
+        const theta = Math.sqrt(globePointsCount * Math.PI) * phi;
+        
+        globePositions[i * 3] = globeRadius * Math.cos(theta) * Math.sin(phi);
+        globePositions[i * 3 + 1] = globeRadius * Math.sin(theta) * Math.sin(phi);
+        globePositions[i * 3 + 2] = globeRadius * Math.cos(phi);
+
+        // Mix colors based on position
+        const mixedColor = color1.clone().lerp(color2, Math.random() * 0.5);
+        globeColors[i * 3] = mixedColor.r;
+        globeColors[i * 3 + 1] = mixedColor.g;
+        globeColors[i * 3 + 2] = mixedColor.b;
+    }
+    
+    globeGeometry.setAttribute('position', new THREE.BufferAttribute(globePositions, 3));
+    globeGeometry.setAttribute('color', new THREE.BufferAttribute(globeColors, 3));
+    
+    const globeMaterial = new THREE.PointsMaterial({
+        size: 1.2,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: true
+    });
+    const globe = new THREE.Points(globeGeometry, globeMaterial);
+    globeGroup.add(globe);
+
+    // Double Core System
+    const core1Geo = new THREE.IcosahedronGeometry(45, 2);
+    const core1Mat = new THREE.MeshBasicMaterial({
+        color: 0xff6b00,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.15
+    });
+    const innerCore = new THREE.Mesh(core1Geo, core1Mat);
+    globeGroup.add(innerCore);
+
+    const core2Geo = new THREE.IcosahedronGeometry(35, 1);
+    const core2Mat = new THREE.MeshBasicMaterial({
         color: 0x5d3fd3,
         wireframe: true,
         transparent: true,
         opacity: 0.1
     });
-    const outerLayer = new THREE.Mesh(outerLayerGeo, outerLayerMat);
-    knowledgeGroup.add(outerLayer);
-
-    // Inner pulsing wireframe
-    const innerCoreGeo = new THREE.IcosahedronGeometry(40, 1);
-    const innerCoreMat = new THREE.MeshBasicMaterial({
-        color: 0xff6b00,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.2
-    });
-    const innerCore = new THREE.Mesh(innerCoreGeo, innerCoreMat);
-    knowledgeGroup.add(innerCore);
+    const innerCore2 = new THREE.Mesh(core2Geo, core2Mat);
+    globeGroup.add(innerCore2);
 
     // 3. Product Nodes (The Satellites)
     const nodes = [];
@@ -76,29 +112,35 @@ document.addEventListener("DOMContentLoaded", () => {
     scene.add(nodeGroup);
 
     const moduleData = [
-        { name: "Brand Book", pos: { x: -120, y: 80, z: 50 }, color: 0x5d3fd3, id: 0 },
-        { name: "Pulse Plan", pos: { x: -140, y: -60, z: -20 }, color: 0xff6b00, id: 1 },
-        { name: "Pulse Scout", pos: { x: 120, y: 100, z: -50 }, color: 0x5d3fd3, id: 2 },
-        { name: "Pulse Engage", pos: { x: 150, y: 0, z: 30 }, color: 0xff6b00, id: 3 },
-        { name: "Pulse Shift", pos: { x: 100, y: -120, z: 80 }, color: 0x5d3fd3, id: 4 }
+        { name: "Brand Book", color: 0x5d3fd3, id: 0 },
+        { name: "Pulse Plan", color: 0xff6b00, id: 1 },
+        { name: "Pulse Scout", color: 0x5d3fd3, id: 2 },
+        { name: "Pulse Engage", color: 0xff6b00, id: 3 },
+        { name: "Pulse Shift", color: 0x5d3fd3, id: 4 }
     ];
 
     const nodeGeo = new THREE.SphereGeometry(10, 32, 32);
-    
+    const orbitRadius = 250;
+
     moduleData.forEach((data, index) => {
+        const angle = (index / moduleData.length) * Math.PI * 2;
+        const x = Math.cos(angle) * orbitRadius;
+        const z = Math.sin(angle) * orbitRadius;
+        const y = (Math.random() - 0.5) * 150;
+
         const nodeMat = new THREE.MeshBasicMaterial({
             color: data.color,
             transparent: true,
             opacity: 0.8
         });
         const node = new THREE.Mesh(nodeGeo, nodeMat);
-        node.position.set(data.pos.x, data.pos.y, data.pos.z);
+        node.position.set(x, y, z);
         node.userData = { id: data.id, name: data.name };
         nodeGroup.add(node);
         nodes.push(node);
 
         // Visual ring
-        const ringGeo = new THREE.RingGeometry(12, 14, 32);
+        const ringGeo = new THREE.RingGeometry(12, 15, 32);
         const ringMat = new THREE.MeshBasicMaterial({
             color: data.color,
             side: THREE.DoubleSide,
@@ -111,19 +153,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 4. Data Flow Lines
     const connectionLines = [];
+    const flows = [];
+    
     nodes.forEach(node => {
-        const points = [];
-        points.push(new THREE.Vector3(0, 0, 0));
-        points.push(node.position);
+        // Line
+        const points = [new THREE.Vector3(0, 0, 0), node.position];
         const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
         const lineMat = new THREE.LineBasicMaterial({
-            color: 0x000000,
+            color: 0xffffff,
             transparent: true,
             opacity: 0.05
         });
         const line = new THREE.Line(lineGeo, lineMat);
         scene.add(line);
         connectionLines.push(line);
+
+        // Flow particles
+        const particleCount = 10;
+        const particles = [];
+        const pGeo = new THREE.SphereGeometry(1, 8, 8);
+        const pMat = new THREE.MeshBasicMaterial({ color: node.material.color, transparent: true, opacity: 0.6 });
+        
+        for(let i=0; i<particleCount; i++) {
+            const p = new THREE.Mesh(pGeo, pMat);
+            p.userData = { t: Math.random(), speed: 0.002 + Math.random() * 0.005 };
+            scene.add(p);
+            particles.push(p);
+        }
+        flows.push({ node, particles });
     });
 
     // 5. Interaction (Raycasting & GSAP)
@@ -203,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
         onUpdate: (self) => {
             if (!isDetailOpen) {
                 nodeGroup.rotation.y = self.progress * Math.PI;
-                knowledgeGroup.rotation.y = -self.progress * Math.PI * 0.5;
+                globeGroup.rotation.y = -self.progress * Math.PI * 0.5;
             }
         }
     });
@@ -215,18 +272,35 @@ document.addEventListener("DOMContentLoaded", () => {
         const elapsed = clock.getElapsedTime();
 
         // Universe rotation
-        starField.rotation.y += 0.0005;
+        starField.rotation.y += 0.0002;
         
-        // Knowledge Core pulse
-        const s = 1 + Math.sin(elapsed * 2) * 0.1;
+        // Globe rotation & core pulse
+        globe.rotation.y += 0.002;
+        const s = 1 + Math.sin(elapsed * 2) * 0.05;
         innerCore.scale.set(s, s, s);
         innerCore.rotation.x += 0.01;
         innerCore.rotation.z += 0.01;
-        outerLayer.rotation.y -= 0.005;
+        
+        innerCore2.rotation.y -= 0.015;
+        innerCore2.rotation.z += 0.01;
+
+        // Data Flow Animation
+        flows.forEach(flow => {
+            flow.particles.forEach(p => {
+                p.userData.t -= p.userData.speed;
+                if (p.userData.t <= 0) p.userData.t = 1;
+                
+                // Interpolate position from node to globe center (0,0,0)
+                p.position.lerpVectors(new THREE.Vector3(0,0,0), flow.node.position, p.userData.t);
+                
+                // Pulse opacity
+                p.material.opacity = p.userData.t * 0.6;
+            });
+        });
 
         // Node floating
         nodes.forEach((node, i) => {
-            node.position.y += Math.sin(elapsed + i) * 0.1;
+            node.position.y += Math.sin(elapsed + i) * 0.15;
             node.children[0].rotation.z += 0.01; // Rotate the ring
         });
 
