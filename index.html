@@ -68,53 +68,71 @@
                 <div class="ambient-orb orb-orange"></div>
             </div>
             
-            <div class="section-header align-left">
+            <div class="section-header align-center">
                 <h2>One System. Continuous Improvement.</h2>
                 <p>Five powerful modules connected by a shared intelligence layer.</p>
             </div>
 
-            <div class="product-viz-container">
-                <canvas id="product-canvas"></canvas>
-                
-                <div class="universe-header">
-                    <h2>Pulse 360 Universe</h2>
-                    <p>The shared intelligence layer feeding every decision.</p>
-                </div>
-
-                <div class="product-overlays">
-                    <!-- Brand Book -->
-                    <div class="product-detail-panel" data-module="0">
-                        <button class="close-panel">&times;</button>
-                        <h3>Brand Book</h3>
-                        <p>Ensures brand strategy, tone, and guardrails are consistently applied across planning, engagement, and optimization.</p>
+            <div class="scroll-infographic-container">
+                <div class="infographic-sticky">
+                    <div class="infographic-center">
+                        <div class="center-core">
+                            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=600&auto=format&fit=crop" alt="Core Database" style="width: 200px; border-radius: 20px; box-shadow: 0 10px 30px rgba(93, 63, 211, 0.3);">
+                        </div>
+                        <svg class="circular-arrows" viewBox="0 0 400 400">
+                            <!-- Circular path for drawing arrows -->
+                            <path id="circle-path" d="M 200, 200 m -180, 0 a 180,180 0 1,1 360,0 a 180,180 0 1,1 -360,0" fill="none" stroke="url(#orange-gradient)" stroke-width="12" stroke-dasharray="1130" stroke-dashoffset="1130" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="orange-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ff6b00" />
+                                    <stop offset="100%" stop-color="#ff9d00" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
                     </div>
 
-                    <!-- Pulse Plan -->
-                    <div class="product-detail-panel" data-module="1">
-                        <button class="close-panel">&times;</button>
-                        <h3>Pulse Plan</h3>
-                        <p>Translates intelligence into confident investment decisions and clear trade-offs.</p>
-                    </div>
+                    <div class="info-items-wrapper">
+                        <!-- Left Side -->
+                        <div class="info-item item-left item-1">
+                            <div class="info-dot"></div>
+                            <div class="info-content">
+                                <h3 style="color: #ff6b00;">Brand Book</h3>
+                                <p>Ensures brand strategy, tone, and guardrails are consistently applied across planning, engagement, and optimization.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item item-left item-2">
+                            <div class="info-dot"></div>
+                            <div class="info-content">
+                                <h3>pulse<span>plan</span></h3>
+                                <p>Translates intelligence into confident investment decisions and clear trade-offs.</p>
+                            </div>
+                        </div>
 
-                    <!-- Pulse Scout -->
-                    <div class="product-detail-panel" data-module="2">
-                        <button class="close-panel">&times;</button>
-                        <h3>Pulse Scout</h3>
-                        <p>Informs what's happening in the market and how competition is shifting.</p>
-                    </div>
+                        <!-- Right Side -->
+                        <div class="info-item item-right item-3">
+                            <div class="info-dot"></div>
+                            <div class="info-content">
+                                <h3>pulse<span>scout</span></h3>
+                                <p>Informs what's happening in the market and how competition is shifting.</p>
+                            </div>
+                        </div>
 
-                    <!-- Pulse Engage -->
-                    <div class="product-detail-panel" data-module="3">
-                        <button class="close-panel">&times;</button>
-                        <h3>Pulse Engage</h3>
-                        <p>Converts exposure into structured, intentional engagement across channels.</p>
-                    </div>
+                        <div class="info-item item-right item-4">
+                            <div class="info-dot"></div>
+                            <div class="info-content">
+                                <h3>pulse<span>engage</span></h3>
+                                <p>Converts exposure into structured, intentional engagement across channels.</p>
+                            </div>
+                        </div>
 
-                    <!-- Pulse Shift -->
-                    <div class="product-detail-panel" data-module="4">
-                        <button class="close-panel">&times;</button>
-                        <h3>Pulse Shift</h3>
-                        <p>Measures impact live and feeds learning back into decisions.</p>
+                        <div class="info-item item-right item-5">
+                            <div class="info-dot"></div>
+                            <div class="info-content">
+                                <h3>pulse<span>shift</span></h3>
+                                <p>Measures impact live and feeds learning back into decisions.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
